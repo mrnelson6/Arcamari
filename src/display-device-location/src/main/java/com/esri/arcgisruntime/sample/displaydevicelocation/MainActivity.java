@@ -17,26 +17,21 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.app.ActivityCompat;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import android.Manifest;
 import com.esri.arcgisruntime.mapping.view.MapView.OnTouchListener;
+
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
@@ -51,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     mMapView = findViewById(R.id.mapView);
-    ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 16);
+    WebmapLoader webmapLoader = new WebmapLoader("https://learngis.maps.arcgis.com/home/webmap/viewer.html?webmap=3476f0e5637c481b89eafd18b6620c79");
+    ArcGISMap map = webmapLoader.getMap();
+
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
           @Override
           public boolean onMultiPointerTap(MotionEvent motionEvent) {
@@ -138,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
               return false;
           }
       });
+
     mMapView.setMap(map);
 
     // get the MapView's LocationDisplay
