@@ -21,6 +21,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,8 @@ import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import android.Manifest;
+import com.esri.arcgisruntime.mapping.view.MapView.OnTouchListener;
+
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
@@ -48,6 +52,92 @@ public class MainActivity extends AppCompatActivity {
 
     mMapView = findViewById(R.id.mapView);
     ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 16);
+    mMapView.setOnTouchListener(new MapView.OnTouchListener() {
+          @Override
+          public boolean onMultiPointerTap(MotionEvent motionEvent) {
+              return false;
+          }
+
+          @Override
+          public boolean onDoubleTouchDrag(MotionEvent motionEvent) {
+              return false;
+          }
+
+          @Override
+          public boolean onUp(MotionEvent motionEvent) {
+              return false;
+          }
+
+          @Override
+          public boolean onRotate(MotionEvent motionEvent, double v) {
+              return false;
+          }
+
+          @Override
+          public boolean onSingleTapConfirmed(MotionEvent e) {
+              return false;
+          }
+
+          @Override
+          public boolean onDoubleTap(MotionEvent e) {
+              return false;
+          }
+
+          @Override
+          public boolean onDoubleTapEvent(MotionEvent e) {
+              return false;
+          }
+
+          @Override
+          public boolean onDown(MotionEvent e) {
+              return false;
+          }
+
+          @Override
+          public void onShowPress(MotionEvent e) {
+
+          }
+
+          @Override
+          public boolean onSingleTapUp(MotionEvent e) {
+              return false;
+          }
+
+          @Override
+          public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+              return false;
+          }
+
+          @Override
+          public void onLongPress(MotionEvent e) {
+
+          }
+
+          @Override
+          public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+              return false;
+          }
+
+          @Override
+          public boolean onScale(ScaleGestureDetector detector) {
+              return false;
+          }
+
+          @Override
+          public boolean onScaleBegin(ScaleGestureDetector detector) {
+              return false;
+          }
+
+          @Override
+          public void onScaleEnd(ScaleGestureDetector detector) {
+
+          }
+
+          @Override
+          public boolean onTouch(View v, MotionEvent event) {
+              return false;
+          }
+      });
     mMapView.setMap(map);
 
     // get the MapView's LocationDisplay
@@ -93,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION );
     if (!mLocationDisplay.isStarted()) {
       mLocationDisplay.startAsync();
-      mLocationDisplay.setShowLocation(true);
     }
 
   }
