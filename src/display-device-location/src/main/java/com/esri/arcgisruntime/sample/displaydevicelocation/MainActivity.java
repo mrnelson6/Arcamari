@@ -26,7 +26,6 @@ import android.support.v4.app.ActivityCompat;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
-//import com.esri.arcgisruntime.sample.displaydevicelocation.WebmapLoader;
 import android.Manifest;
 
 public class MainActivity extends AppCompatActivity {
