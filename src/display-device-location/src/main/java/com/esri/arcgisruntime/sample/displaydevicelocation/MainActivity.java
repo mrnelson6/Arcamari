@@ -23,22 +23,15 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.app.ActivityCompat;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
-import android.Manifest;
-import com.esri.arcgisruntime.mapping.view.MapView.OnTouchListener;
 
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
-  private int requestCode = 2;
-  String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
-          .ACCESS_COARSE_LOCATION};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -141,40 +134,6 @@ public class MainActivity extends AppCompatActivity {
     // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
-
-    // Listen to changes in the status of the location data source.
-    //MATT THINKS WE DONT NEED THIS
-    mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
-      @Override
-      public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
-
-        // If LocationDisplay started OK, then continue.
-        if (dataSourceStatusChangedEvent.isStarted())
-          return;
-
-        // No error is reported, then continue.
-        if (dataSourceStatusChangedEvent.getError() == null)
-          return;
-
-        // If an error is found, handle the failure to start.
-        // Check permissions to see if failure may be due to lack of permissions.
-        boolean permissionCheck1 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[0]) ==
-                PackageManager.PERMISSION_GRANTED;
-        boolean permissionCheck2 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[1]) ==
-                PackageManager.PERMISSION_GRANTED;
-
-        if (!(permissionCheck1 && permissionCheck2)) {
-          // If permissions are not already granted, request permission from the user.
-          ActivityCompat.requestPermissions(MainActivity.this, reqPermissions, requestCode);
-        } else {
-          // Report other unknown failure types to the user - for example, location services may not
-          // be enabled on the device.
-          String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
-                  .getSource().getLocationDataSource().getError().getMessage());
-          Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-        }
-      }
-    });
     // Listen to changes in the status of the location data source.
     // Start Navigation Mode
     // This mode is best suited for in-vehicle navigation.
@@ -213,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
   protected void onResume(){
     super.onResume();
     mMapView.resume();
-
   }
 
   @Override
