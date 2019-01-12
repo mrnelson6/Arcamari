@@ -10,7 +10,7 @@ public class Player {
     private double mDiameter;
     private List<Item> mItemsCollected;
 
-    Player(double mLat, double mLon, double diameter){
+    public Player(double mLat, double mLon, double diameter){
         this.mLat = mLat;
         this.mLon = mLon;
         this.mDiameter = diameter;
