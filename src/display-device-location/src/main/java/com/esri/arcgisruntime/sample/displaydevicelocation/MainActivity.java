@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
     if (!mLocationDisplay.isStarted()) {
       mLocationDisplay.startAsync();
     }
-
+    GameRunner game = new GameRunner(mMapView);
+    game.mainLoop();
   }
 
   @Override
