@@ -1,9 +1,13 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
+import android.widget.Toast;
+
 import java.util.List;
 import java.lang.Math;
 
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.geometry.GeometryEngine;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
@@ -41,13 +45,14 @@ public class GameRunner {
     mMap.loadAsync();
   }
 
-  public void mainLoop() {
+  public void collide(MainActivity ma) {
     Location playerLoc = mMapView.getLocationDisplay().getLocation();
     Point playerPt = playerLoc.getPosition();
-    double arbDiam = 10;
+    double arbDiam = 20;
     //guessed what x and y
     if (playerPt != null) {
-      Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
+      Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
+      Player player = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
       int i = mItems.size()-1;
       Item currItem;
       while(i >= 0) {
@@ -56,6 +61,7 @@ public class GameRunner {
         if (Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()), 2) +
                       Math.pow((player.getLon() - currItem.getLongitude()), 2)) <
                                (player.getDiameter() + currItem.getDiameter())) {
+          Toast.makeText(ma, "monch", Toast.LENGTH_LONG).show();
           ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
 
           try {

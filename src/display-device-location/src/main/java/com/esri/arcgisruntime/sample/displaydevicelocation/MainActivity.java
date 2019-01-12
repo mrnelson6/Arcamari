@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
   private boolean mIsBound = false;
   private MusicService mServ;
+  private GameRunner mGame;
   private ServiceConnection Scon = new ServiceConnection() {
     public void onServiceConnected(ComponentName name, IBinder binder) {
       mServ = ((MusicService.ServiceBinder) binder).getService();
@@ -178,6 +179,16 @@ public class MainActivity extends AppCompatActivity {
     // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
+    mLocationDisplay.setInitialZoomScale(2500);
+    mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
+      @Override
+      public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+        mGame.collide(MainActivity.this);
+       // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
+      }
+    });
+
+
     mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
       @Override
       public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
@@ -223,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     startService(music);
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49";
-    GameRunner game = new GameRunner(mMapView, mapURL);
+    mGame = new GameRunner(mMapView, mapURL);
   }
 
   @Override
