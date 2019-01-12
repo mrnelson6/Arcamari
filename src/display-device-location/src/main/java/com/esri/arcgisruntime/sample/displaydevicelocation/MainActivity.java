@@ -47,6 +47,7 @@ import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -213,6 +214,27 @@ public class MainActivity extends AppCompatActivity {
              symbolToSet = mKatamariPictureSymbol4;
         else
             symbolToSet = mKatamariPictureSymbol;
+        float diam;
+        if(mGame != null) {
+           diam = (float)mGame.getPlayerDiameter();
+           if(diam<0){
+             diam=50;
+           }
+        } else {
+          diam = 50;
+        }
+        //for(PictureMarkerSymbol sym : new ArrayList<PictureMarkerSymbol>(mKatamariPictureSymbol, mKatamariPictureSymbol2, mKatamariPictureSymbol3, mKatamariPictureSymbol4)
+
+        mKatamariPictureSymbol.setHeight(diam);
+        mKatamariPictureSymbol.setWidth(diam);
+        mKatamariPictureSymbol2.setHeight(diam);
+        mKatamariPictureSymbol2.setWidth(diam);
+        mKatamariPictureSymbol3.setHeight(diam);
+        mKatamariPictureSymbol3.setWidth(diam);
+        mKatamariPictureSymbol4.setHeight(diam);
+        mKatamariPictureSymbol4.setWidth(diam);
+
+
         mLocationDisplay.setShowAccuracy(false);
         mLocationDisplay.setShowPingAnimation(false);
         mLocationDisplay.setHeadingSymbol(symbolToSet);
