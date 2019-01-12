@@ -40,41 +40,37 @@ import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 
 
-
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
-    private int requestCode = 2;
-    String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
-            .ACCESS_COARSE_LOCATION};
-    private boolean mIsBound = false;
-    private MusicService mServ;
-    private ServiceConnection Scon =new ServiceConnection(){
-
-        public void onServiceConnected(ComponentName name, IBinder
-                binder) {
-            mServ = ((MusicService.ServiceBinder)binder).getService();
-        }
-
-        public void onServiceDisconnected(ComponentName name) {
-            mServ = null;
-        }
-    };
-
-    void doBindService(){
-        bindService(new Intent(this,MusicService.class),
-                Scon,Context.BIND_AUTO_CREATE);
-        mIsBound = true;
+  private int requestCode = 2;
+  String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
+                                          Manifest.permission.ACCESS_COARSE_LOCATION };
+  private boolean mIsBound = false;
+  private MusicService mServ;
+  private ServiceConnection Scon = new ServiceConnection() {
+    public void onServiceConnected(ComponentName name, IBinder binder) {
+      mServ = ((MusicService.ServiceBinder) binder).getService();
     }
 
-    void doUnbindService()
-    {
-        if(mIsBound)
-        {
-            unbindService(Scon);
-            mIsBound = false;
-        }
+    public void onServiceDisconnected(ComponentName name) {
+      mServ = null;
     }
+  };
+
+  void doBindService() {
+    bindService(new Intent(this, MusicService.class),
+                Scon, Context.BIND_AUTO_CREATE);
+    mIsBound = true;
+  }
+
+  void doUnbindService() {
+    if (mIsBound) {
+      unbindService(Scon);
+      mIsBound = false;
+    }
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -82,107 +78,107 @@ public class MainActivity extends AppCompatActivity {
 
     mMapView = findViewById(R.id.mapView);
 
-     // add topographic basemap
-      ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
-      // create the service feature table
-      ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
-      // create the feature layer using the service feature table
-      FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
-      // get the operational layers then add to operational layer to ArcGISMap
-      map.getOperationalLayers().add(featureLayer);
+    // add topographic basemap
+    ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
+    // create the service feature table
+    ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
+    // create the feature layer using the service feature table
+    FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
+    // get the operational layers then add to operational layer to ArcGISMap
+    map.getOperationalLayers().add(featureLayer);
 
-//      ServiceFeatureTable table = new ServiceFeatureTable("http://sampleserver5.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0");
-//      FeatureLayer layer = new FeatureLayer(table);
-//      map.getOperationalLayers().add(layer);
-    //WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
-    //ArcGISMap map = webmapLoader.getMap();
+    // ServiceFeatureTable table = new ServiceFeatureTable("http://sampleserver5.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0");
+    // FeatureLayer layer = new FeatureLayer(table);
+    // map.getOperationalLayers().add(layer);
+    // WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
+    // ArcGISMap map = webmapLoader.getMap();
 
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
-          @Override
-          public boolean onMultiPointerTap(MotionEvent motionEvent) {
-              return false;
-          }
+      @Override
+      public boolean onMultiPointerTap(MotionEvent motionEvent) {
+        return false;
+      }
 
-          @Override
-          public boolean onDoubleTouchDrag(MotionEvent motionEvent) {
-              return false;
-          }
+      @Override
+      public boolean onDoubleTouchDrag(MotionEvent motionEvent) {
+        return false;
+      }
 
-          @Override
-          public boolean onUp(MotionEvent motionEvent) {
-              return false;
-          }
+      @Override
+      public boolean onUp(MotionEvent motionEvent) {
+        return false;
+      }
 
-          @Override
-          public boolean onRotate(MotionEvent motionEvent, double v) {
-              return false;
-          }
+      @Override
+      public boolean onRotate(MotionEvent motionEvent, double v) {
+        return false;
+      }
 
-          @Override
-          public boolean onSingleTapConfirmed(MotionEvent e) {
-              return false;
-          }
+      @Override
+      public boolean onSingleTapConfirmed(MotionEvent e) {
+        return false;
+      }
 
-          @Override
-          public boolean onDoubleTap(MotionEvent e) {
-              return false;
-          }
+      @Override
+      public boolean onDoubleTap(MotionEvent e) {
+        return false;
+      }
 
-          @Override
-          public boolean onDoubleTapEvent(MotionEvent e) {
-              return false;
-          }
+      @Override
+      public boolean onDoubleTapEvent(MotionEvent e) {
+        return false;
+      }
 
-          @Override
-          public boolean onDown(MotionEvent e) {
-              return false;
-          }
+      @Override
+      public boolean onDown(MotionEvent e) {
+        return false;
+      }
 
-          @Override
-          public void onShowPress(MotionEvent e) {
+      @Override
+      public void onShowPress(MotionEvent e) {
 
-          }
+      }
 
-          @Override
-          public boolean onSingleTapUp(MotionEvent e) {
-              return false;
-          }
+      @Override
+      public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+      }
 
-          @Override
-          public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-              return false;
-          }
+      @Override
+      public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+      }
 
-          @Override
-          public void onLongPress(MotionEvent e) {
+      @Override
+      public void onLongPress(MotionEvent e) {
 
-          }
+      }
 
-          @Override
-          public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-              return false;
-          }
+      @Override
+      public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+      }
 
-          @Override
-          public boolean onScale(ScaleGestureDetector detector) {
-              return false;
-          }
+      @Override
+      public boolean onScale(ScaleGestureDetector detector) {
+        return false;
+      }
 
-          @Override
-          public boolean onScaleBegin(ScaleGestureDetector detector) {
-              return false;
-          }
+      @Override
+      public boolean onScaleBegin(ScaleGestureDetector detector) {
+        return false;
+      }
 
-          @Override
-          public void onScaleEnd(ScaleGestureDetector detector) {
+      @Override
+      public void onScaleEnd(ScaleGestureDetector detector) {
 
-          }
+      }
 
-          @Override
-          public boolean onTouch(View v, MotionEvent event) {
-              return false;
-          }
-      });
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        return false;
+      }
+    });
 
     mMapView.setMap(map);
 
@@ -190,41 +186,41 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay = mMapView.getLocationDisplay();
 
     mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
-          @Override
-          public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
+      @Override
+      public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
+        // If LocationDisplay started OK, then continue.
+        if (dataSourceStatusChangedEvent.isStarted())
+          return;
 
-              // If LocationDisplay started OK, then continue.
-              if (dataSourceStatusChangedEvent.isStarted())
-                  return;
+        // No error is reported, then continue.
+        if (dataSourceStatusChangedEvent.getError() == null)
+          return;
 
-              // No error is reported, then continue.
-              if (dataSourceStatusChangedEvent.getError() == null)
-                  return;
+        // If an error is found, handle the failure to start.
+        // Check permissions to see if failure may be due to lack of permissions.
+        boolean permissionCheck1 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[0]) ==
+                                                                      PackageManager.PERMISSION_GRANTED;
+        boolean permissionCheck2 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[1]) ==
+                                                                      PackageManager.PERMISSION_GRANTED;
 
-              // If an error is found, handle the failure to start.
-              // Check permissions to see if failure may be due to lack of permissions.
-              boolean permissionCheck1 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[0]) ==
-                      PackageManager.PERMISSION_GRANTED;
-              boolean permissionCheck2 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[1]) ==
-                      PackageManager.PERMISSION_GRANTED;
-
-              if (!(permissionCheck1 && permissionCheck2)) {
-                  // If permissions are not already granted, request permission from the user.
-                  ActivityCompat.requestPermissions(MainActivity.this, reqPermissions, requestCode);
-              } else {
-                  // Report other unknown failure types to the user - for example, location services may not
-                  // be enabled on the device.
-                  String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
-                          .getSource().getLocationDataSource().getError().getMessage());
-                  Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-              }
-          }
-      });
+        if (!(permissionCheck1 && permissionCheck2)) {
+          // If permissions are not already granted, request permission from the user.
+          ActivityCompat.requestPermissions(MainActivity.this, reqPermissions, requestCode);
+        } else {
+          // Report other unknown failure types to the user - for example, location services may not
+          // be enabled on the device.
+          String message = String.format("Error in DataSourceStatusChangedListener: %s",
+                                          dataSourceStatusChangedEvent.getSource()
+                                                  .getLocationDataSource().getError().getMessage());
+          Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+        }
+      }
+    });
 
     // Listen to changes in the status of the location data source.
     // Start Navigation Mode
     // This mode is best suited for in-vehicle navigation.
-    mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION );
+    mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
     if (!mLocationDisplay.isStarted()) {
       mLocationDisplay.startAsync();
     }
@@ -233,9 +229,9 @@ public class MainActivity extends AppCompatActivity {
     Intent music = new Intent(this, MusicService.class);
     startService(music);
 
-   // GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
-   //while(true) {
-     //   game.mainLoop();
+    // GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
+    //while(true) {
+    //   game.mainLoop();
     //}
   }
 
@@ -250,25 +246,25 @@ public class MainActivity extends AppCompatActivity {
       // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
       // request permission UX will be shown again, option should be shown to allow never showing the UX again.
       // Alternative would be to disable functionality so request is not shown again.
-      Toast.makeText(MainActivity.this, "LocationDisplayManager cannot run because location permission was denied", Toast
-              .LENGTH_SHORT).show();
-
+      Toast.makeText(MainActivity.this,
+                     "LocationDisplayManager cannot run because location permission was denied",
+                      Toast.LENGTH_SHORT).show();
       // Update UI to reflect that the location display did not actually start
     }
   }
 
   @Override
-  protected void onPause(){
+  protected void onPause() {
     mMapView.pause();
     super.onPause();
-    //mServ.pauseMusic();
+    // mServ.pauseMusic();
   }
 
   @Override
-  protected void onResume(){
+  protected void onResume() {
     super.onResume();
     mMapView.resume();
-    //mServ.pauseMusic();
+    // mServ.pauseMusic();
   }
 
   @Override
@@ -277,5 +273,4 @@ public class MainActivity extends AppCompatActivity {
     mMapView.dispose();
     mServ.onDestroy();
   }
-
 }

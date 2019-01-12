@@ -8,6 +8,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
+
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
   private final IBinder mBinder = new ServiceBinder();
@@ -40,12 +41,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
       mPlayer.setVolume(100, 100);
     }
 
-
     mPlayer.setOnErrorListener(new OnErrorListener() {
 
       public boolean onError(MediaPlayer mp, int what, int
-          extra) {
-
+              extra) {
         onError(mPlayer, what, extra);
         return true;
       }
@@ -62,7 +61,6 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     if (mPlayer.isPlaying()) {
       mPlayer.pause();
       length = mPlayer.getCurrentPosition();
-
     }
   }
 

@@ -3,8 +3,8 @@ package com.esri.arcgisruntime.sample.displaydevicelocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
 
+public class Player {
   private double mLat;
   private double mLon;
   private double mDiameter;

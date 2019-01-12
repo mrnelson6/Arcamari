@@ -7,6 +7,7 @@ import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
 import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 
+
 public final class WebmapLoader {
 
   private LoadStatus mLoadStatus = LoadStatus.NOT_LOADED;
@@ -23,7 +24,6 @@ public final class WebmapLoader {
   }
 
   private void loadMap() {
-
     mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
       @Override
       public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {

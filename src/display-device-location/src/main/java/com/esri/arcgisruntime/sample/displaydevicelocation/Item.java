@@ -6,6 +6,7 @@ import com.esri.arcgisruntime.geometry.Point;
 
 import java.util.Map;
 
+
 public final class Item {
 
   private boolean mCollected = false;
@@ -16,10 +17,9 @@ public final class Item {
 
   public Item(Feature feature) {
     mFeature = feature;
-
     Geometry geometry = feature.getGeometry();
-    if (geometry instanceof Point)
-    {
+
+    if (geometry instanceof Point) {
       Point point = (Point) geometry;
       mLatitude = point.getX();
       mLongitude = point.getY();
@@ -30,11 +30,11 @@ public final class Item {
 
   private double calculateDiameter() {
     Map<String, Object> attributes = mFeature.getAttributes();
-    if (attributes.containsKey("diameter"))
-    {
+
+    if (attributes.containsKey("diameter")) {
       Object diameter_value = attributes.get("diameter");
-      if (diameter_value instanceof Double)
-      {
+
+      if (diameter_value instanceof Double) {
         return ((Double) diameter_value).doubleValue();
       }
     }
