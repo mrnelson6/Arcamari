@@ -48,9 +48,10 @@ public class GameRunner {
     //guessed what x and y
     if (playerPt != null) {
       Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
-
-      for (Item currItem : mItems) {
-
+      int i = mItems.size()-1;
+      Item currItem;
+      while(i >= 0) {
+        currItem = mItems.get(i);
         //check collision
         if (Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()), 2) +
                       Math.pow((player.getLon() - currItem.getLongitude()), 2)) <
@@ -65,6 +66,7 @@ public class GameRunner {
             System.out.println(e.getMessage());
           }
         }
+        i--;
       }
     }
   }
