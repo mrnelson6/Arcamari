@@ -54,7 +54,7 @@ public class GameRunner {
         //check collision
         if (Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()), 2) +
                       Math.pow((player.getLon() - currItem.getLongitude()), 2)) <
-                      (player.getDiameter() + currItem.getDiameter())) {
+                               (player.getDiameter() + currItem.getDiameter())) {
           ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
 
           try {
