@@ -48,4 +48,8 @@ public class Player {
   public void setItemsCollected(List<Item> itemsCollected) {
     this.mItemsCollected = itemsCollected;
   }
+
+  public void addItemsCollected(Item item) {
+    this.mItemsCollected.add(item);
+  }
 }

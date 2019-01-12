@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     startService(music);
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49";
-    mGame = new GameRunner(mMapView, mapURL);
+    mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
   }
 
   @Override
