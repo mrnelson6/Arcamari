@@ -14,7 +14,7 @@ public final class Item {
   private double  mLatitude;
   private double  mLongitude;
 
-  public void Item(Feature feature) {
+  public Item(Feature feature) {
     mFeature = feature;
 
     Geometry geometry = feature.getGeometry();
@@ -44,6 +44,8 @@ public final class Item {
   public double getDiameter() {
     return mDiameter;
   }
+
+  public Feature getFeature() { return mFeature; }
 
   public double getLatitude() {
     return mLatitude;
