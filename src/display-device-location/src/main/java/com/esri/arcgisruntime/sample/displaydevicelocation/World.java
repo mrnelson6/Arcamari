@@ -21,7 +21,7 @@ public final class World {
   private Basemap mBasemap;
   private String mDescription;
   private Integer mSecondsToComplete;
-  
+
   public World(ArcGISMap map) {
     mItems = new ArrayList();
 
@@ -30,11 +30,16 @@ public final class World {
       if (layer instanceof FeatureLayer) {
         FeatureLayer featureLayer = (FeatureLayer) layer;
         FeatureTable featureTable = featureLayer.getFeatureTable();
+        if (!(featureTable instanceof ServiceFeatureTable)) {
+          continue;
+        }
+        ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
 
         QueryParameters qp = new QueryParameters();
         qp.setMaxFeatures(100);
         qp.setWhereClause("1=1");
-        ListenableFuture<FeatureQueryResult> future = featureTable.queryFeaturesAsync(qp);
+        ListenableFuture<FeatureQueryResult> future =
+            serviceFeatureTable.queryFeaturesAsync(qp, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
         try {
           FeatureQueryResult currFeatures = future.get();
           for (Feature currFeature : currFeatures) {

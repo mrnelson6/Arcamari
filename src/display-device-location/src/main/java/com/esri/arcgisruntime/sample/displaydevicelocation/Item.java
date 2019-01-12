@@ -32,10 +32,13 @@ public final class Item {
     Map<String, Object> attributes = mFeature.getAttributes();
 
     if (attributes.containsKey("diameter")) {
-      Object diameter_value = attributes.get("diameter");
+      Object diameterValue = attributes.get("diameter");
 
-      if (diameter_value instanceof Double) {
-        return ((Double) diameter_value).doubleValue();
+      if (diameterValue instanceof Double) {
+        return ((Double) diameterValue).doubleValue();
+      }
+      else if (diameterValue instanceof String) {
+        return Double.parseDouble((String)diameterValue);
       }
     }
     return 1.0;
