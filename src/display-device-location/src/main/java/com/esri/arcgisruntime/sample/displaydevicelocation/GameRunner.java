@@ -23,23 +23,25 @@ public class GameRunner {
         Point playerPt = playerLoc.getPosition();
         double arbDiam = 10;
         //guessed what x and y
-        Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
-        for(Item currItem : items) {
-            //check collision
-            if(Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()),2) +
-                    Math.pow((player.getLon() - currItem.getLongitude()),2)) <
-                    (player.getDiameter() + currItem.getDiameter())) {
-                ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
-                try {
-                    future.get();
-                    items.remove(currItem);
-                } catch(Exception e) {
-                    System.out.println("I cannot begin to fathom how we got here!");
-                    System.out.println(e.getMessage());
+        if (playerPt != null) {
+            Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
+            for (Item currItem : items) {
+                //check collision
+                if (Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()), 2) +
+                        Math.pow((player.getLon() - currItem.getLongitude()), 2)) <
+                        (player.getDiameter() + currItem.getDiameter())) {
+                    ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
+                    try {
+                        future.get();
+                        items.remove(currItem);
+                    } catch (Exception e) {
+                        System.out.println("I cannot begin to fathom how we got here!");
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
+            //wait one second possibly
+            mainLoop();
         }
-        //wait one second possibly
-        mainLoop();
     }
 }
