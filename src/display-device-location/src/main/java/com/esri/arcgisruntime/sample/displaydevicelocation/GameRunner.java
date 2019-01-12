@@ -4,21 +4,41 @@ import java.util.List;
 import java.lang.Math;
 
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.loadable.LoadStatus;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
+import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.location.LocationDataSource.Location;
 
-
 public class GameRunner {
-  public MapView mMapView;
-  public World mWorld;
-  public List<Item> items;
+  private LoadStatus   mLoadStatus = LoadStatus.NOT_LOADED;
+  private ArcGISMap    mMap;
+  private MapView      mMapView;
+  private World        mWorld;
+  private List<Item>   mItems;
 
-  public GameRunner(MapView mapView, ServiceFeatureTable serviceFeatureTable) {
+  public GameRunner(MapView mapView, String mapURL) {
+    loadMap(mapURL);
     mMapView = mapView;
-    mWorld = new World(mMapView.getMap(), serviceFeatureTable);
-    items = mWorld.getItems();
+    mMapView.setMap(mMap);
+  }
+
+  private void loadMap(String mapURL) {
+    mMap = new ArcGISMap(mapURL);
+    mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
+      @Override
+      public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
+        mLoadStatus = loadStatusChangedEvent.getNewLoadStatus();
+        if (mLoadStatus == LoadStatus.LOADED) {
+          mWorld = new World(mMap);
+          mItems = mWorld.getItems();
+        }
+      }
+    });
+    mMap.loadAsync();
   }
 
   public void mainLoop() {
@@ -29,7 +49,7 @@ public class GameRunner {
     if (playerPt != null) {
       Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
 
-      for (Item currItem : items) {
+      for (Item currItem : mItems) {
 
         //check collision
         if (Math.sqrt(Math.pow((player.getLat() - currItem.getLatitude()), 2) +
@@ -39,7 +59,7 @@ public class GameRunner {
 
           try {
             future.get();
-            items.remove(currItem);
+            mItems.remove(currItem);
           } catch (Exception e) {
             System.out.println("I cannot begin to fathom how we got here!");
             System.out.println(e.getMessage());

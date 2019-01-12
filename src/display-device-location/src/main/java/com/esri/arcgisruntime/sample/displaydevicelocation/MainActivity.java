@@ -34,6 +34,7 @@ import android.content.pm.PackageManager;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.LayerList;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
@@ -79,19 +80,13 @@ public class MainActivity extends AppCompatActivity {
     mMapView = findViewById(R.id.mapView);
 
     // add topographic basemap
-    ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
+    //ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
     // create the service feature table
-    ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
+    //ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
     // create the feature layer using the service feature table
-    FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
+    //FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
     // get the operational layers then add to operational layer to ArcGISMap
-    map.getOperationalLayers().add(featureLayer);
-
-    // ServiceFeatureTable table = new ServiceFeatureTable("http://sampleserver5.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0");
-    // FeatureLayer layer = new FeatureLayer(table);
-    // map.getOperationalLayers().add(layer);
-    // WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
-    // ArcGISMap map = webmapLoader.getMap();
+    //map.getOperationalLayers().add(featureLayer);
 
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
       @Override
@@ -180,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    mMapView.setMap(map);
-
     // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
@@ -229,10 +222,8 @@ public class MainActivity extends AppCompatActivity {
     Intent music = new Intent(this, MusicService.class);
     startService(music);
 
-    // GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
-    //while(true) {
-    //   game.mainLoop();
-    //}
+    final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49";
+    GameRunner game = new GameRunner(mMapView, mapURL);
   }
 
   @Override
