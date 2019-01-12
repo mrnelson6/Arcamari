@@ -204,18 +204,21 @@ public class MainActivity extends AppCompatActivity {
   protected void onPause(){
     mMapView.pause();
     super.onPause();
+    mServ.pauseMusic();
   }
 
   @Override
   protected void onResume(){
     super.onResume();
     mMapView.resume();
+    mServ.pauseMusic();
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
     mMapView.dispose();
+    mServ.onDestroy();
   }
 
 }
