@@ -47,14 +47,16 @@ import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
+import java.util.Random;
+
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
   private PictureMarkerSymbol mKatamariPictureSymbol;
   private PictureMarkerSymbol mKatamariPictureSymbol2;
-  private PictureMarkerSymbol getmKatamariPictureSymbol3;
-  private PictureMarkerSymbol getGetmKatamariPictureSymbol4;
+  private PictureMarkerSymbol mKatamariPictureSymbol3;
+  private PictureMarkerSymbol mKatamariPictureSymbol4;
   private int requestCode = 2;
   String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
@@ -89,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
+    mKatamariPictureSymbol2 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari2));
+    mKatamariPictureSymbol3 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari3));
+    mKatamariPictureSymbol4 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari4));
 
     mMapView = findViewById(R.id.mapView);
 
@@ -196,13 +201,25 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
         //Create a picture marker symbol from a file on disk;
+        PictureMarkerSymbol symbolToSet;
+        int num = new Random().nextInt(4);
+        if(num==0)
+            symbolToSet = mKatamariPictureSymbol;
+        else if(num==1)
+              symbolToSet = mKatamariPictureSymbol2;
+        else if(num==2)
+             symbolToSet = mKatamariPictureSymbol3;
+        else if(num==3)
+             symbolToSet = mKatamariPictureSymbol4;
+        else
+            symbolToSet = mKatamariPictureSymbol;
         mLocationDisplay.setShowAccuracy(false);
         mLocationDisplay.setShowPingAnimation(false);
-        mLocationDisplay.setHeadingSymbol(mKatamariPictureSymbol);
-        mLocationDisplay.setAcquiringSymbol(mKatamariPictureSymbol);
-        mLocationDisplay.setDefaultSymbol(mKatamariPictureSymbol);
-        mLocationDisplay.setPingAnimationSymbol(mKatamariPictureSymbol);
-        mLocationDisplay.setCourseSymbol(mKatamariPictureSymbol);
+        mLocationDisplay.setHeadingSymbol(symbolToSet);
+        mLocationDisplay.setAcquiringSymbol(symbolToSet);
+        mLocationDisplay.setDefaultSymbol(symbolToSet);
+        mLocationDisplay.setPingAnimationSymbol(symbolToSet);
+        mLocationDisplay.setCourseSymbol(symbolToSet);
         //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
         //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
           //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
