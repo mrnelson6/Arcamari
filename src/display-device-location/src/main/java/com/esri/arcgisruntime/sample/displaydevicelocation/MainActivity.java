@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     Intent music = new Intent(this, MusicService.class);
     startService(music);
 
-    final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49";
+    final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
   }
 
