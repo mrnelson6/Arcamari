@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 //      FeatureLayer layer = new FeatureLayer(table);
 //      map.getOperationalLayers().add(layer);
     //WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
-   // ArcGISMap map = webmapLoader.getMap();
+    //ArcGISMap map = webmapLoader.getMap();
 
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
           @Override
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
-      mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
+    mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
           @Override
           public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
 
@@ -233,10 +233,10 @@ public class MainActivity extends AppCompatActivity {
     Intent music = new Intent(this, MusicService.class);
     startService(music);
 
-    GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
-    while(true) {
-        game.mainLoop();
-    }
+   // GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
+   //while(true) {
+     //   game.mainLoop();
+    //}
   }
 
   @Override
