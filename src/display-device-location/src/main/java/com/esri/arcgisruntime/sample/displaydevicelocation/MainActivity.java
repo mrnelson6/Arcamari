@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +40,7 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+        mLocationDisplay.setHeadingSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
         mGame.collide(MainActivity.this);
        // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
       }
@@ -226,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
     // This mode is best suited for in-vehicle navigation.
     mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
     if (!mLocationDisplay.isStarted()) {
+      mLocationDisplay.setDefaultSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
       mLocationDisplay.startAsync();
     }
 
@@ -243,7 +247,9 @@ public class MainActivity extends AppCompatActivity {
     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       // Location permission was granted. This would have been triggered in response to failing to start the
       // LocationDisplay, so try starting this again.
+      mLocationDisplay.setDefaultSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
       mLocationDisplay.startAsync();
+
     } else {
       // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
       // request permission UX will be shown again, option should be shown to allow never showing the UX again.
