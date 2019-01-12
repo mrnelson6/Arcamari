@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     mMapView = findViewById(R.id.mapView);
-    WebmapLoader webmapLoader = new WebmapLoader("https://learngis.maps.arcgis.com/home/webmap/viewer.html?webmap=3476f0e5637c481b89eafd18b6620c79");
+    WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
     ArcGISMap map = webmapLoader.getMap();
 
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
@@ -204,14 +204,14 @@ public class MainActivity extends AppCompatActivity {
   protected void onPause(){
     mMapView.pause();
     super.onPause();
-    mServ.pauseMusic();
+    //mServ.pauseMusic();
   }
 
   @Override
   protected void onResume(){
     super.onResume();
     mMapView.resume();
-    mServ.pauseMusic();
+    //mServ.pauseMusic();
   }
 
   @Override
