@@ -2,14 +2,8 @@ package com.esri.arcgisruntime.sample.displaydevicelocation;
 
 import java.util.List;
 import java.lang.Math;
-import java.util.ArrayList;
-import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.view.MapView;
-import com.esri.arcgisruntime.data.FeatureTable;
-import com.esri.arcgisruntime.data.QueryParameters;
-import com.esri.arcgisruntime.data.FeatureQueryResult;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
-import com.esri.arcgisruntime.data.Feature;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.location.LocationDataSource.Location;
 
@@ -17,35 +11,18 @@ import com.esri.arcgisruntime.location.LocationDataSource.Location;
 
 public class GameRunner {
     public MapView mMapView;
+    public World world;
     public GameRunner(MapView mMapView) {
         this.mMapView = mMapView;
+        world = new World(mMapView.getMap());
     }
 
     public void mainLoop() {
-        ArcGISMap map = mMapView.getMap();
-
-        List<Item> items = new ArrayList();
-
-        List<FeatureTable> ft = map.getTables();
-        //iterate over features and check for collisions
-        List<Feature> features = new ArrayList();
-        for(FeatureTable currTable : ft) {
-            QueryParameters qp = new QueryParameters();
-            qp.setMaxFeatures(50);
-            ListenableFuture<FeatureQueryResult> future = currTable.queryFeaturesAsync(qp);
-            try {
-                FeatureQueryResult currFeatures = future.get();
-                for(Feature currFeature : currFeatures) {
-                    features.add(currFeature);
-                }
-            } catch(Exception e) {
-                System.out.println("what happened!");
-            }
-        }
-
+        List<Item> items = world.getItems();
         Location playerLoc = mMapView.getLocationDisplay().getLocation();
         Point playerPt = playerLoc.getPosition();
         double arbDiam = 10;
+        //guessed what x and y
         Player player = new Player(playerPt.getX(), playerPt.getY(), arbDiam);
         for(Item currItem : items) {
             //check collision
