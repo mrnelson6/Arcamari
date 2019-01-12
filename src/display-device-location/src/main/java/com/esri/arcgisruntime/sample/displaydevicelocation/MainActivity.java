@@ -21,6 +21,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -39,11 +44,19 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
+  private PictureMarkerSymbol mKatamariPictureSymbol;
+  private PictureMarkerSymbol mKatamariPictureSymbol2;
+  private PictureMarkerSymbol mKatamariPictureSymbol3;
+  private PictureMarkerSymbol mKatamariPictureSymbol4;
   private int requestCode = 2;
   String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
@@ -77,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
+    mKatamariPictureSymbol2 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari2));
+    mKatamariPictureSymbol3 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari3));
+    mKatamariPictureSymbol4 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari4));
 
     mMapView = findViewById(R.id.mapView);
 
@@ -183,6 +200,29 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+        //Create a picture marker symbol from a file on disk;
+        PictureMarkerSymbol symbolToSet;
+        int num = new Random().nextInt(4);
+        if(num==0)
+            symbolToSet = mKatamariPictureSymbol;
+        else if(num==1)
+              symbolToSet = mKatamariPictureSymbol2;
+        else if(num==2)
+             symbolToSet = mKatamariPictureSymbol3;
+        else if(num==3)
+             symbolToSet = mKatamariPictureSymbol4;
+        else
+            symbolToSet = mKatamariPictureSymbol;
+        mLocationDisplay.setShowAccuracy(false);
+        mLocationDisplay.setShowPingAnimation(false);
+        mLocationDisplay.setHeadingSymbol(symbolToSet);
+        mLocationDisplay.setAcquiringSymbol(symbolToSet);
+        mLocationDisplay.setDefaultSymbol(symbolToSet);
+        mLocationDisplay.setPingAnimationSymbol(symbolToSet);
+        mLocationDisplay.setCourseSymbol(symbolToSet);
+        //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
+        //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
+          //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
         mGame.collide(MainActivity.this);
        // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
       }
@@ -226,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
     // This mode is best suited for in-vehicle navigation.
     mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
     if (!mLocationDisplay.isStarted()) {
+      mLocationDisplay.setDefaultSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
       mLocationDisplay.startAsync();
     }
 
@@ -243,7 +284,9 @@ public class MainActivity extends AppCompatActivity {
     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       // Location permission was granted. This would have been triggered in response to failing to start the
       // LocationDisplay, so try starting this again.
+      mLocationDisplay.setDefaultSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
       mLocationDisplay.startAsync();
+
     } else {
       // If permission was denied, show toast to inform user what was chosen. If LocationDisplay is started again,
       // request permission UX will be shown again, option should be shown to allow never showing the UX again.
