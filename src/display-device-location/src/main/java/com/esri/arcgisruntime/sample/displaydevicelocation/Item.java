@@ -38,7 +38,7 @@ public final class Item {
         return ((Double) diameter_value).doubleValue();
       }
     }
-    return -1.0;
+    return 1.0;
   }
 
   public double getDiameter() {

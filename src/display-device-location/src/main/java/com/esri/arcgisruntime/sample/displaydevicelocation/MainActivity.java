@@ -16,12 +16,15 @@
 
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -30,13 +33,20 @@ import android.widget.Toast;
 import android.content.pm.PackageManager;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
+import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.data.ServiceFeatureTable;
+import com.esri.arcgisruntime.layers.FeatureLayer;
+
 
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
+    private int requestCode = 2;
+    String[] reqPermissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission
+            .ACCESS_COARSE_LOCATION};
     private boolean mIsBound = false;
     private MusicService mServ;
     private ServiceConnection Scon =new ServiceConnection(){
@@ -71,8 +81,21 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     mMapView = findViewById(R.id.mapView);
-    WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
-    ArcGISMap map = webmapLoader.getMap();
+
+     // add topographic basemap
+      ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
+      // create the service feature table
+      ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
+      // create the feature layer using the service feature table
+      FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
+      // get the operational layers then add to operational layer to ArcGISMap
+      map.getOperationalLayers().add(featureLayer);
+
+//      ServiceFeatureTable table = new ServiceFeatureTable("http://sampleserver5.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0");
+//      FeatureLayer layer = new FeatureLayer(table);
+//      map.getOperationalLayers().add(layer);
+    //WebmapLoader webmapLoader = new WebmapLoader("https://www.arcgis.com/home/webmap/viewer.html?webmap=ac2d655059fb402fa6bf2be64120eb49");
+   // ArcGISMap map = webmapLoader.getMap();
 
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
           @Override
@@ -166,6 +189,38 @@ public class MainActivity extends AppCompatActivity {
     // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
+      mLocationDisplay.addDataSourceStatusChangedListener(new LocationDisplay.DataSourceStatusChangedListener() {
+          @Override
+          public void onStatusChanged(LocationDisplay.DataSourceStatusChangedEvent dataSourceStatusChangedEvent) {
+
+              // If LocationDisplay started OK, then continue.
+              if (dataSourceStatusChangedEvent.isStarted())
+                  return;
+
+              // No error is reported, then continue.
+              if (dataSourceStatusChangedEvent.getError() == null)
+                  return;
+
+              // If an error is found, handle the failure to start.
+              // Check permissions to see if failure may be due to lack of permissions.
+              boolean permissionCheck1 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[0]) ==
+                      PackageManager.PERMISSION_GRANTED;
+              boolean permissionCheck2 = ContextCompat.checkSelfPermission(MainActivity.this, reqPermissions[1]) ==
+                      PackageManager.PERMISSION_GRANTED;
+
+              if (!(permissionCheck1 && permissionCheck2)) {
+                  // If permissions are not already granted, request permission from the user.
+                  ActivityCompat.requestPermissions(MainActivity.this, reqPermissions, requestCode);
+              } else {
+                  // Report other unknown failure types to the user - for example, location services may not
+                  // be enabled on the device.
+                  String message = String.format("Error in DataSourceStatusChangedListener: %s", dataSourceStatusChangedEvent
+                          .getSource().getLocationDataSource().getError().getMessage());
+                  Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+              }
+          }
+      });
+
     // Listen to changes in the status of the location data source.
     // Start Navigation Mode
     // This mode is best suited for in-vehicle navigation.
@@ -178,8 +233,10 @@ public class MainActivity extends AppCompatActivity {
     Intent music = new Intent(this, MusicService.class);
     startService(music);
 
-    GameRunner game = new GameRunner(mMapView);
-    game.mainLoop();
+    GameRunner game = new GameRunner(mMapView, serviceFeatureTable);
+    while(true) {
+        game.mainLoop();
+    }
   }
 
   @Override

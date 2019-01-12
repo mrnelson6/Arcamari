@@ -2,6 +2,8 @@ package com.esri.arcgisruntime.sample.displaydevicelocation;
 
 import java.util.List;
 import java.lang.Math;
+
+import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
@@ -12,13 +14,14 @@ import com.esri.arcgisruntime.location.LocationDataSource.Location;
 public class GameRunner {
     public MapView mMapView;
     public World mWorld;
-    public GameRunner(MapView mMapView) {
-        this.mMapView = mMapView;
-        mWorld = new World(mMapView.getMap());
+    public List<Item> items;
+    public GameRunner(MapView mapView, ServiceFeatureTable serviceFeatureTable) {
+        mMapView = mapView;
+        mWorld = new World(mMapView.getMap(), serviceFeatureTable);
+        items = mWorld.getItems();
     }
 
     public void mainLoop() {
-        List<Item> items = mWorld.getItems();
         Location playerLoc = mMapView.getLocationDisplay().getLocation();
         Point playerPt = playerLoc.getPosition();
         double arbDiam = 10;
@@ -40,8 +43,6 @@ public class GameRunner {
                     }
                 }
             }
-            //wait one second possibly
-            mainLoop();
         }
     }
 }

@@ -5,6 +5,7 @@ import com.esri.arcgisruntime.data.Feature;
 import com.esri.arcgisruntime.data.FeatureQueryResult;
 import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.data.QueryParameters;
+import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 
@@ -17,13 +18,15 @@ public final class World {
     private String mDescription;
     private Integer mSecondsToComplete;
 
-    public World(ArcGISMap map) {
-        List<FeatureTable> ft = map.getTables();
+    public World(ArcGISMap map, ServiceFeatureTable sft) {
+        mItems = new ArrayList();
+       //List<FeatureTable> ft = map.getTables();
         // iterate over features and check for collisions
-        for (FeatureTable currTable : ft) {
+       // for (FeatureTable currTable : ft) {
             QueryParameters qp = new QueryParameters();
-            qp.setMaxFeatures(50);
-            ListenableFuture<FeatureQueryResult> future = currTable.queryFeaturesAsync(qp);
+            qp.setMaxFeatures(100);
+            qp.setWhereClause("1=1");
+            ListenableFuture<FeatureQueryResult> future = sft.queryFeaturesAsync(qp);
             try {
                 FeatureQueryResult currFeatures = future.get();
                 for (Feature currFeature : currFeatures) {
@@ -32,8 +35,10 @@ public final class World {
                 }
             } catch (Exception e) {
                 System.out.println("what happened!");
+                System.out.println(e.getMessage());
+                System.out.println(e.getCause());
             }
-        }
+        //}
     }
 
     public ArrayList<Item> getItems() { return mItems; }
