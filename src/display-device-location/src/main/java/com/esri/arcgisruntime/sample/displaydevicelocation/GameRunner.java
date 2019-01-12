@@ -11,14 +11,14 @@ import com.esri.arcgisruntime.location.LocationDataSource.Location;
 
 public class GameRunner {
     public MapView mMapView;
-    public World world;
+    public World mWorld;
     public GameRunner(MapView mMapView) {
         this.mMapView = mMapView;
-        world = new World(mMapView.getMap());
+        mWorld = new World(mMapView.getMap());
     }
 
     public void mainLoop() {
-        List<Item> items = world.getItems();
+        List<Item> items = mWorld.getItems();
         Location playerLoc = mMapView.getLocationDisplay().getLocation();
         Point playerPt = playerLoc.getPosition();
         double arbDiam = 10;

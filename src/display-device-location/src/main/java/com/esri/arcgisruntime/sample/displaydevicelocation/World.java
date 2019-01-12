@@ -17,7 +17,7 @@ public final class World {
     private String mDescription;
     private Integer mSecondsToComplete;
 
-    World(ArcGISMap map) {
+    public World(ArcGISMap map) {
         List<FeatureTable> ft = map.getTables();
         // iterate over features and check for collisions
         for (FeatureTable currTable : ft) {
