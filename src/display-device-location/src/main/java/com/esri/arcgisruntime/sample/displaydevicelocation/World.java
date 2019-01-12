@@ -38,9 +38,17 @@ public final class World {
 
     public ArrayList<Item> getItems() { return mItems; }
 
+    public void setItems(ArrayList<Item> items) { this.mItems = items; }
+
     public Basemap getBasemap() { return mBasemap; }
+
+    public void setBasemap(Basemap basemap) { this.mBasemap = basemap; }
 
     public String getDescription() { return mDescription; }
 
+    public void setDescription(String description) { this.mDescription = description; }
+
     public Integer getSecondsToComplete() { return mSecondsToComplete; }
+
+    public void setSecondsToComplete(Integer seconds) { this.mSecondsToComplete = seconds; }
 }
