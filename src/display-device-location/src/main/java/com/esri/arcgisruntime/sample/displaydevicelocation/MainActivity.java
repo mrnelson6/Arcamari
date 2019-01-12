@@ -21,7 +21,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
@@ -40,12 +44,17 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
   private LocationDisplay mLocationDisplay;
+  private PictureMarkerSymbol mKatamariPictureSymbol;
+  private PictureMarkerSymbol mKatamariPictureSymbol2;
+  private PictureMarkerSymbol getmKatamariPictureSymbol3;
+  private PictureMarkerSymbol getGetmKatamariPictureSymbol4;
   private int requestCode = 2;
   String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
 
     mMapView = findViewById(R.id.mapView);
 
@@ -185,7 +195,17 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
-        mLocationDisplay.setHeadingSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
+        //Create a picture marker symbol from a file on disk;
+        mLocationDisplay.setShowAccuracy(false);
+        mLocationDisplay.setShowPingAnimation(false);
+        mLocationDisplay.setHeadingSymbol(mKatamariPictureSymbol);
+        mLocationDisplay.setAcquiringSymbol(mKatamariPictureSymbol);
+        mLocationDisplay.setDefaultSymbol(mKatamariPictureSymbol);
+        mLocationDisplay.setPingAnimationSymbol(mKatamariPictureSymbol);
+        mLocationDisplay.setCourseSymbol(mKatamariPictureSymbol);
+        //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
+        //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
+          //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
         mGame.collide(MainActivity.this);
        // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
       }
