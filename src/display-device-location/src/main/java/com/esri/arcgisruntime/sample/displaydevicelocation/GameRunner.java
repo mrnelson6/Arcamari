@@ -62,13 +62,17 @@ public class GameRunner {
   public void collide(MainActivity ma) {
     Location playerLoc = mMapView.getLocationDisplay().getLocation();
     Point playerPt = playerLoc.getPosition();
-    double arbDiam = 51;
+    double arbDiam = 10;
     //guessed what x and y
     if (playerPt != null) {
       if(!mattsmistake) {
         Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
         mPlayer = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
         mattsmistake = true;
+      } else {
+        Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
+        mPlayer.setLat(wgs84Point.getX());
+        mPlayer.setLon(wgs84Point.getY());
       }
       int i = mItems.size()-1;
       Item currItem;
