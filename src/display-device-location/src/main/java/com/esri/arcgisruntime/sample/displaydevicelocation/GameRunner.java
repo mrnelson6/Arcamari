@@ -82,7 +82,7 @@ public class GameRunner {
         if ((Math.sqrt(Math.pow((mPlayer.getLat() - currItem.getLatitude()), 2) +
                        Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
                                 (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5) &&
-                                 mPlayer.getDiameter() > currItem.getDiameter()) {
+                                 mPlayer.getDiameter() != currItem.getDiameter()) {
           String playerDiameterString = Double.toString(mPlayer.getDiameter());
           String currentItemDiameterString = Double.toString(currItem.getDiameter());
           String numCollectedItems = Integer.toString(mPlayer.getItemsCollected().size());
