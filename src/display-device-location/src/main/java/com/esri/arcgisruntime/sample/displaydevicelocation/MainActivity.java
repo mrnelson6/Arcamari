@@ -37,17 +37,26 @@ import android.view.View;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
+import com.esri.arcgisruntime.data.FeatureTable;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.LayerList;
+import com.esri.arcgisruntime.mapping.view.Graphic;
+import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -202,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+
+        if(true && mGame.getmPlayer()!=null ){
+          List<Item> itemsCollected = mGame.getmPlayer().getItemsCollected();
+          List<Item> allItems = mGame.getmItems();
+          graphics(allItems, itemsCollected);
+        }
         //Create a picture marker symbol from a file on disk;
         PictureMarkerSymbol symbolToSet;
         int num = new Random().nextInt(4);
@@ -339,5 +354,31 @@ public class MainActivity extends AppCompatActivity {
     super.onDestroy();
     mMapView.dispose();
     mServ.onDestroy();
+  }
+
+  public void graphics(List<Item> allItems, List<Item> itemsCollected){
+    LayerList operationalLayers = mMapView.getMap().getOperationalLayers();
+    for (Layer layer : operationalLayers) {
+      if (layer instanceof FeatureLayer) {
+        FeatureLayer featureLayer = (FeatureLayer) layer;
+        FeatureTable featureTable = featureLayer.getFeatureTable();
+        if (!(featureTable instanceof ServiceFeatureTable)) {
+          continue;
+        }
+        ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
+        ListenableFuture<Void> future = serviceFeatureTable.undoLocalEditsAsync();
+        try {
+          future.get();
+        } catch(Exception e) {
+        }
+      }
+    }
+    for(Item currItem : allItems) {
+      currItem.getFeature().getFeatureTable().getFeatureLayer().setFeatureVisible(currItem.getFeature(), false);
+    }
+    for(Item currItem : itemsCollected) {
+      currItem.getFeature().getFeatureTable().getFeatureLayer().setFeatureVisible(currItem.getFeature(), true);
+    }
+
   }
 }

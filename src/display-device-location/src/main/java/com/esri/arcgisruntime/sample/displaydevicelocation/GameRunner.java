@@ -115,4 +115,12 @@ public class GameRunner {
       }
     }
   }
+
+  public Player getmPlayer() {
+    return mPlayer;
+  }
+
+  public List<Item> getmItems() {
+    return mItems;
+  }
 }
