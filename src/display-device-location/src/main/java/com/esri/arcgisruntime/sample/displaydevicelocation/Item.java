@@ -1,6 +1,7 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
 import com.esri.arcgisruntime.data.Feature;
+import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
 
@@ -14,8 +15,11 @@ public final class Item {
   private Feature mFeature;
   private double  mLatitude;
   private double  mLongitude;
+  private String  mFeatureTableName;
 
   public Item(Feature feature) {
+    FeatureTable featureTable = feature.getFeatureTable();
+    mFeatureTableName = featureTable.getDisplayName();
     mFeature = feature;
     Geometry geometry = feature.getGeometry();
 
@@ -49,6 +53,10 @@ public final class Item {
   }
 
   public Feature getFeature() { return mFeature; }
+
+  public String getFeatureTableName() {
+    return mFeatureTableName;
+  }
 
   public double getLatitude() {
     return mLatitude;
