@@ -17,6 +17,7 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +33,16 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
@@ -78,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
   private boolean mIsBound = false;
   private MusicService mServ;
   private GameRunner mGame;
+  private Button mButton;
+  private PopupWindow mPopupWindow;
+  private RelativeLayout mRelativeLayout;
+  private Context mContext;
+  private Activity mActivity;
+
   private ServiceConnection Scon = new ServiceConnection() {
     public void onServiceConnected(ComponentName name, IBinder binder) {
       mServ = ((MusicService.ServiceBinder) binder).getService();
@@ -138,22 +151,43 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     mComplete = false;
     setContentView(R.layout.activity_main);
+    mContext = getApplicationContext();
+    mActivity = MainActivity.this;
+    mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
+    mButton = (Button) findViewById(R.id.btn);
+    mMapView = findViewById(R.id.mapView);
+
+    mButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        // Initialize a new instance of LayoutInflater service
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        // Inflate the custom layout/view
+        View customView = inflater.inflate(R.layout.custom_layout,null);
+
+        // Initialize a new instance of popup window
+        mPopupWindow = new PopupWindow(
+            customView,
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            true
+        );
+
+        mPopupWindow.setElevation(20);
+
+        // Finally, show the popup window at the center location of root relative layout
+        mPopupWindow.showAtLocation(mRelativeLayout, Gravity.CENTER,0,0);
+      }
+    });
+
     mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
     mKatamariPictureSymbol2 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari2));
     mKatamariPictureSymbol3 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari3));
     mKatamariPictureSymbol4 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari4));
 
-    mMapView = findViewById(R.id.mapView);
+    onTouchList = mMapView.getOnTouchListener();
 
-    // add topographic basemap
-    //ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 10);
-    // create the service feature table
-    //ServiceFeatureTable serviceFeatureTable = new ServiceFeatureTable("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/Redlands_Trees_View/FeatureServer/0");
-    // create the feature layer using the service feature table
-    //FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
-    // get the operational layers then add to operational layer to ArcGISMap
-    //map.getOperationalLayers().add(featureLayer);
-      onTouchList = mMapView.getOnTouchListener();
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
       @Override
       public boolean onMultiPointerTap(MotionEvent motionEvent) {
