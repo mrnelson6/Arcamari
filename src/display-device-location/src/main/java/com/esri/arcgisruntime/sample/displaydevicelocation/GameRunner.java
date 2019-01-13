@@ -73,7 +73,9 @@ public class GameRunner {
                       Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
                                (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5) &&
                 mPlayer.getDiameter() > currItem.getDiameter()) {
-          Toast.makeText(ma, "monch", Toast.LENGTH_LONG).show();
+          String playerDiameterString = Double.toString(mPlayer.getDiameter());
+          String currentItemDiameterString = Double.toString(currItem.getDiameter());
+          Toast.makeText(ma, "Player diameter: " + playerDiameterString + "\nCollected item diameter: " + currentItemDiameterString, Toast.LENGTH_LONG).show();
           ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
           try {
             future.get();
