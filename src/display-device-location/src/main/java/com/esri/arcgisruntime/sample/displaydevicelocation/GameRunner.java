@@ -19,13 +19,13 @@ import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.location.LocationDataSource.Location;
 
 public class GameRunner {
-  private LoadStatus   mLoadStatus = LoadStatus.NOT_LOADED;
-  private ArcGISMap    mMap;
-  private MapView      mMapView;
-  private World        mWorld;
-  private List<Item>   mItems;
+  private LoadStatus      mLoadStatus = LoadStatus.NOT_LOADED;
+  private ArcGISMap       mMap;
+  private MapView         mMapView;
+  private World           mWorld;
+  private List<Item>      mItems;
   private LocationDisplay mLocationDisplay;
-  private Player mPlayer;
+  private Player          mPlayer;
 
   public GameRunner(MapView mapView, String mapURL, LocationDisplay locD) {
     loadMap(mapURL);
@@ -64,15 +64,15 @@ public class GameRunner {
     if (playerPt != null) {
       Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
       mPlayer = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
-      int i = mItems.size()-1;
+      int i = mItems.size() - 1;
       Item currItem;
-      while(i >= 0) {
+      while (i >= 0) {
         currItem = mItems.get(i);
         //check collision
         if ((Math.sqrt(Math.pow((mPlayer.getLat() - currItem.getLatitude()), 2) +
-                      Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
-                               (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5) &&
-                mPlayer.getDiameter() > currItem.getDiameter()) {
+                       Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
+                                (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5) &&
+                                 mPlayer.getDiameter() > currItem.getDiameter()) {
           String playerDiameterString = Double.toString(mPlayer.getDiameter());
           String currentItemDiameterString = Double.toString(currItem.getDiameter());
           Toast.makeText(ma, "Player diameter: " + playerDiameterString + "\nCollected item diameter: " + currentItemDiameterString, Toast.LENGTH_LONG).show();
