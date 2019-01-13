@@ -39,6 +39,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
+import com.esri.arcgisruntime.data.FeatureTable;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.LayerList;
@@ -48,16 +53,20 @@ import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
   private MapView mMapView;
+  private boolean mComplete;
   private LocationDisplay mLocationDisplay;
+  private View.OnTouchListener onTouchList;
   private PictureMarkerSymbol mKatamariPictureSymbol;
   private PictureMarkerSymbol mKatamariPictureSymbol2;
   private PictureMarkerSymbol mKatamariPictureSymbol3;
@@ -108,8 +117,15 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       public void onFinish() {
+        mComplete = true;
         timerTextView.setText("Done!");
-        mMapView.setOnTouchListener(new DefaultMapViewOnTouchListener(Context, mMapView));
+        if(mGame.getmPlayer()!=null ){
+            mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.OFF);
+            mMapView.setOnTouchListener(onTouchList);
+          List<Item> itemsCollected = mGame.getmPlayer().getItemsCollected();
+          List<Item> allItems = mGame.getmItems();
+          graphics(allItems, itemsCollected);
+        }
       }
     };
     timer.start();
@@ -118,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mComplete = false;
     setContentView(R.layout.activity_main);
     mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
     mKatamariPictureSymbol2 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari2));
@@ -134,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     //FeatureLayer featureLayer = new FeatureLayer(serviceFeatureTable);
     // get the operational layers then add to operational layer to ArcGISMap
     //map.getOperationalLayers().add(featureLayer);
-
+      onTouchList = mMapView.getOnTouchListener();
     mMapView.setOnTouchListener(new MapView.OnTouchListener() {
       @Override
       public boolean onMultiPointerTap(MotionEvent motionEvent) {
@@ -229,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
     mLocationDisplay.addLocationChangedListener(new LocationDisplay.LocationChangedListener() {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+
         //Create a picture marker symbol from a file on disk;
         PictureMarkerSymbol symbolToSet;
         int num = new Random().nextInt(4);
@@ -260,7 +278,13 @@ public class MainActivity extends AppCompatActivity {
         mKatamariPictureSymbol3.setWidth(lastDiam);
         mKatamariPictureSymbol4.setHeight(lastDiam);
         mKatamariPictureSymbol4.setWidth(lastDiam);
-
+        if(mComplete) {
+          mLocationDisplay.setShowLocation(false);
+          mKatamariPictureSymbol.setOpacity(0);
+          mKatamariPictureSymbol2.setOpacity(0);
+          mKatamariPictureSymbol3.setOpacity(0);
+          mKatamariPictureSymbol4.setOpacity(0);
+        }
 
         mLocationDisplay.setShowAccuracy(false);
         mLocationDisplay.setShowPingAnimation(false);
@@ -325,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
-    initCountdownTimer(480000);
+    initCountdownTimer(60000);
   }
 
   @Override
@@ -367,5 +391,31 @@ public class MainActivity extends AppCompatActivity {
     super.onDestroy();
     mMapView.dispose();
     mServ.onDestroy();
+  }
+
+  public void graphics(List<Item> allItems, List<Item> itemsCollected){
+    LayerList operationalLayers = mMapView.getMap().getOperationalLayers();
+    for (Layer layer : operationalLayers) {
+      if (layer instanceof FeatureLayer) {
+        FeatureLayer featureLayer = (FeatureLayer) layer;
+        FeatureTable featureTable = featureLayer.getFeatureTable();
+        if (!(featureTable instanceof ServiceFeatureTable)) {
+          continue;
+        }
+        ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
+        ListenableFuture<Void> future = serviceFeatureTable.undoLocalEditsAsync();
+        try {
+          future.get();
+        } catch(Exception e) {
+        }
+      }
+    }
+    for(Item currItem : allItems) {
+      currItem.getFeature().getFeatureTable().getFeatureLayer().setFeatureVisible(currItem.getFeature(), false);
+    }
+    for(Item currItem : itemsCollected) {
+      currItem.getFeature().getFeatureTable().getFeatureLayer().setFeatureVisible(currItem.getFeature(), true);
+    }
+
   }
 }
