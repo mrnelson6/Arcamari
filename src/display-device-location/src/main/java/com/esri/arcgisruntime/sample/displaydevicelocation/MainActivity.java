@@ -379,7 +379,6 @@ public class MainActivity extends AppCompatActivity {
   protected void onDestroy() {
     super.onDestroy();
     mMapView.dispose();
-    mServ.onDestroy();
   }
 
   public void graphics(List<Item> allItems, List<Item> itemsCollected){
