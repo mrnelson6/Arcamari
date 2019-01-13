@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             symbolToSet = mKatamariPictureSymbol;
         float diam;
         if(mGame != null) {
-          diam = (float) mGame.getPlayerDiameter();
+          diam = (float) mGame.getPlayerDiameter() / 2;
           if(diam > lastDiam){
             lastDiam = diam;
           }
