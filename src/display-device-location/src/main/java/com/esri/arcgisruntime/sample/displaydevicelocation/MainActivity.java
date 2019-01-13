@@ -117,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       public void onFinish() {
+
         mComplete = true;
-        timerTextView.setText("Done!");
+        timerTextView.setText("Game Over");
+
         if(mGame.getmPlayer()!=null ){
             mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.OFF);
             mMapView.setOnTouchListener(onTouchList);
@@ -390,7 +392,6 @@ public class MainActivity extends AppCompatActivity {
   protected void onDestroy() {
     super.onDestroy();
     mMapView.dispose();
-    mServ.onDestroy();
   }
 
   public void graphics(List<Item> allItems, List<Item> itemsCollected){
