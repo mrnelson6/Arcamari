@@ -14,9 +14,11 @@ public final class Item {
   private Feature mFeature;
   private double  mLatitude;
   private double  mLongitude;
+  private String mTableName;
 
-  public Item(Feature feature) {
+  public Item(Feature feature, String tableName) {
     mFeature = feature;
+    mTableName = tableName;
     Geometry geometry = feature.getGeometry();
 
     if (geometry instanceof Point) {
@@ -43,6 +45,7 @@ public final class Item {
     }
     return 1.0;
   }
+  public String getTableName() { return mTableName; }
 
   public double getDiameter() {
     return mDiameter;

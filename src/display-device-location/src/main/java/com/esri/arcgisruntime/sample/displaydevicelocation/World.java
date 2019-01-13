@@ -23,36 +23,39 @@ public final class World {
   private Integer mSecondsToComplete;
 
   public World(ArcGISMap map) {
-    mItems = new ArrayList();
+    updateItems(map);
+  }
 
-    LayerList operationalLayers = map.getOperationalLayers();
-    for (Layer layer : operationalLayers) {
-      if (layer instanceof FeatureLayer) {
-        FeatureLayer featureLayer = (FeatureLayer) layer;
-        FeatureTable featureTable = featureLayer.getFeatureTable();
-        if (!(featureTable instanceof ServiceFeatureTable)) {
-          continue;
-        }
-        ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
+  public void updateItems(ArcGISMap map) {
+      mItems = new ArrayList();
 
-        QueryParameters qp = new QueryParameters();
-       // qp.setMaxFeatures(100);
-        qp.setWhereClause("1=1");
-        ListenableFuture<FeatureQueryResult> future =
-            serviceFeatureTable.queryFeaturesAsync(qp, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
-        try {
-          FeatureQueryResult currFeatures = future.get();
-          for (Feature currFeature : currFeatures) {
-            Item item = new Item(currFeature);
-            mItems.add(item);
+      LayerList operationalLayers = map.getOperationalLayers();
+      for (Layer layer : operationalLayers) {
+          if (layer instanceof FeatureLayer) {
+              FeatureLayer featureLayer = (FeatureLayer) layer;
+              FeatureTable featureTable = featureLayer.getFeatureTable();
+              if (!(featureTable instanceof ServiceFeatureTable)) {
+                  continue;
+              }
+              ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
+
+              QueryParameters qp = new QueryParameters();
+              qp.setWhereClause("1=1");
+              ListenableFuture<FeatureQueryResult> future =
+                      serviceFeatureTable.queryFeaturesAsync(qp, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
+              try {
+                  FeatureQueryResult currFeatures = future.get();
+                  for (Feature currFeature : currFeatures) {
+                      Item item = new Item(currFeature, featureTable.getTableName());
+                      mItems.add(item);
+                  }
+              } catch (Exception e) {
+                  System.out.println("what happened!?");
+                  System.out.println(e.getMessage());
+                  System.out.println(e.getCause());
+              }
           }
-        } catch (Exception e) {
-          System.out.println("what happened!?");
-          System.out.println(e.getMessage());
-          System.out.println(e.getCause());
-        }
       }
-    }
   }
 
   public ArrayList<Item> getItems() {
