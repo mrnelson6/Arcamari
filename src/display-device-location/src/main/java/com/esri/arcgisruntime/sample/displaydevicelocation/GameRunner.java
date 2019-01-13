@@ -26,12 +26,14 @@ public class GameRunner {
   private List<Item>   mItems;
   private LocationDisplay mLocationDisplay;
   private Player mPlayer;
+  private boolean mattsmistake;
 
   public GameRunner(MapView mapView, String mapURL, LocationDisplay locD) {
     loadMap(mapURL);
     mMapView = mapView;
     mMapView.setMap(mMap);
     mLocationDisplay = locD;
+    mattsmistake = false;
   }
 
   private void loadMap(String mapURL) {
@@ -62,8 +64,11 @@ public class GameRunner {
     double arbDiam = 51;
     //guessed what x and y
     if (playerPt != null) {
-      Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
-      mPlayer = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
+      if(!mattsmistake) {
+        Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
+        mPlayer = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
+        mattsmistake = true;
+      }
       int i = mItems.size()-1;
       Item currItem;
       while(i >= 0) {
@@ -82,10 +87,9 @@ public class GameRunner {
             double itemArea = Math.PI * Math.pow(currItem.getDiameter() / 2, 2);
             double playerArea = Math.PI * Math.pow(mPlayer.getDiameter() / 2, 2);
             playerArea += itemArea;
-            mPlayer.setDiameter(Math.sqrt(playerArea / Math.PI));
+            mPlayer.setDiameter(2 * Math.sqrt(playerArea / Math.PI));
             mPlayer.addItemsCollected(currItem);
-
-
+            
             //possiblly needed change scale
             //double scaleVal = 2500 + (player.getDiameter() * 100);
             //ListenableFuture<Boolean> scaleFuture = mMapView.setViewpointScaleAsync(scaleVal);
