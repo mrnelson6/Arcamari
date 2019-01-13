@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
   private PictureMarkerSymbol mKatamariPictureSymbol2;
   private PictureMarkerSymbol mKatamariPictureSymbol3;
   private PictureMarkerSymbol mKatamariPictureSymbol4;
+  private float lastDiam = 50;
   private int requestCode = 2;
   String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
@@ -216,23 +217,22 @@ public class MainActivity extends AppCompatActivity {
             symbolToSet = mKatamariPictureSymbol;
         float diam;
         if(mGame != null) {
-           diam = (float)mGame.getPlayerDiameter();
-           if(diam<0){
-             diam=50;
-           }
-        } else {
-          diam = 50;
+          diam = (float) mGame.getPlayerDiameter();
+          if(diam > lastDiam){
+            lastDiam = diam;
+          }
         }
+
         //for(PictureMarkerSymbol sym : new ArrayList<PictureMarkerSymbol>(mKatamariPictureSymbol, mKatamariPictureSymbol2, mKatamariPictureSymbol3, mKatamariPictureSymbol4)
 
-        mKatamariPictureSymbol.setHeight(diam);
-        mKatamariPictureSymbol.setWidth(diam);
-        mKatamariPictureSymbol2.setHeight(diam);
-        mKatamariPictureSymbol2.setWidth(diam);
-        mKatamariPictureSymbol3.setHeight(diam);
-        mKatamariPictureSymbol3.setWidth(diam);
-        mKatamariPictureSymbol4.setHeight(diam);
-        mKatamariPictureSymbol4.setWidth(diam);
+        mKatamariPictureSymbol.setHeight(lastDiam);
+        mKatamariPictureSymbol.setWidth(lastDiam);
+        mKatamariPictureSymbol2.setHeight(lastDiam);
+        mKatamariPictureSymbol2.setWidth(lastDiam);
+        mKatamariPictureSymbol3.setHeight(lastDiam);
+        mKatamariPictureSymbol3.setWidth(lastDiam);
+        mKatamariPictureSymbol4.setHeight(lastDiam);
+        mKatamariPictureSymbol4.setWidth(lastDiam);
 
 
         mLocationDisplay.setShowAccuracy(false);
