@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       public void onFinish() {
-        timerTextView.setText("Done!");
+        timerTextView.setText("Game Over");
         if(mGame.getmPlayer()!=null ){
           List<Item> itemsCollected = mGame.getmPlayer().getItemsCollected();
           List<Item> allItems = mGame.getmItems();
