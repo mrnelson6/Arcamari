@@ -42,6 +42,7 @@ import android.content.pm.PackageManager;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.LayerList;
+import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onFinish() {
         timerTextView.setText("Done!");
+        mMapView.setOnTouchListener(new DefaultMapViewOnTouchListener(Context, mMapView));
       }
     };
     timer.start();
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             symbolToSet = mKatamariPictureSymbol;
         float diam;
         if(mGame != null) {
-          diam = (float) mGame.getPlayerDiameter() / 2;
+          diam = (float) mGame.getPlayerDiameter() * 3;
           if(diam > lastDiam){
             lastDiam = diam;
           }

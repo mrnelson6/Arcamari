@@ -98,7 +98,7 @@ public class GameRunner {
             //make player bigger
             double itemArea = Math.PI * Math.pow(currItem.getDiameter() / 2, 2);
             double playerArea = Math.PI * Math.pow(mPlayer.getDiameter() / 2, 2);
-            playerArea += itemArea;
+            playerArea += itemArea / 8;
             mPlayer.setDiameter(2 * Math.sqrt(playerArea / Math.PI));
             mPlayer.addItemsCollected(currItem);
             
