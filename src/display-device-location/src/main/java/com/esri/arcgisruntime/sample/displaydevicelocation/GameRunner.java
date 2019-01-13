@@ -81,7 +81,11 @@ public class GameRunner {
                                  mPlayer.getDiameter() > currItem.getDiameter()) {
           String playerDiameterString = Double.toString(mPlayer.getDiameter());
           String currentItemDiameterString = Double.toString(currItem.getDiameter());
-          Toast.makeText(ma, "Player diameter: " + playerDiameterString + "\nCollected item diameter: " + currentItemDiameterString, Toast.LENGTH_LONG).show();
+          String numCollectedItems = Integer.toString(mPlayer.getItemsCollected().size());
+          Toast.makeText(ma, "Player diameter: " + playerDiameterString +
+                                   "\nCollected item diameter: " + currentItemDiameterString +
+                                   "\nNumber of items collected: " + numCollectedItems,
+                                   Toast.LENGTH_LONG).show();
           ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
           try {
             future.get();
