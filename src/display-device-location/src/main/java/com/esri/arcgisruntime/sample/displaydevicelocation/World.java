@@ -36,7 +36,7 @@ public final class World {
         ServiceFeatureTable serviceFeatureTable = (ServiceFeatureTable) featureTable;
 
         QueryParameters qp = new QueryParameters();
-        qp.setMaxFeatures(100);
+       // qp.setMaxFeatures(100);
         qp.setWhereClause("1=1");
         ListenableFuture<FeatureQueryResult> future =
             serviceFeatureTable.queryFeaturesAsync(qp, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL);
