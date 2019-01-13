@@ -27,6 +27,7 @@ import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.pm.PackageManager;
 
@@ -58,6 +60,7 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -95,6 +98,28 @@ public class MainActivity extends AppCompatActivity {
       unbindService(Scon);
       mIsBound = false;
     }
+  }
+
+  public void initCountdownTimer(long duration) {
+    final TextView timerTextView = (TextView) findViewById(R.id.timerTextView);
+    timerTextView.setTextColor(Color.BLACK);
+    timerTextView.setBackgroundColor(Color.WHITE);
+
+    CountDownTimer timer = new CountDownTimer(duration, 1000) {
+      @Override
+      public void onTick(final long millSecondsLeftToFinish) {
+        timerTextView.setText("Time left: "+String.format("%02d:%02d",
+                              TimeUnit.MILLISECONDS.toMinutes(millSecondsLeftToFinish),
+                              TimeUnit.MILLISECONDS.toSeconds(millSecondsLeftToFinish) -
+                              TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millSecondsLeftToFinish))));
+    }
+
+      @Override
+      public void onFinish() {
+        timerTextView.setText("Done!");
+      }
+    };
+    timer.start();
   }
 
   @Override
@@ -313,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
+    initCountdownTimer(480000);
   }
 
   @Override

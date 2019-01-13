@@ -1,5 +1,7 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
+import android.os.CountDownTimer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -27,7 +29,6 @@ public class GameRunner {
   private LocationDisplay mLocationDisplay;
   private Player mPlayer;
   private boolean mattsmistake;
-
 
   public GameRunner(MapView mapView, String mapURL, LocationDisplay locD) {
     loadMap(mapURL);
@@ -65,7 +66,7 @@ public class GameRunner {
     double arbDiam = 10;
     //guessed what x and y
     if (playerPt != null) {
-      if(!mattsmistake) {
+      if (!mattsmistake) {
         Point wgs84Point = (Point) GeometryEngine.project(playerPt, SpatialReferences.getWebMercator());
         mPlayer = new Player(wgs84Point.getX(), wgs84Point.getY(), arbDiam);
         mattsmistake = true;
