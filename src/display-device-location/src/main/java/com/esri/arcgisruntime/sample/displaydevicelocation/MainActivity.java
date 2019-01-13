@@ -117,6 +117,11 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onFinish() {
         timerTextView.setText("Done!");
+        if(mGame.getmPlayer()!=null ){
+          List<Item> itemsCollected = mGame.getmPlayer().getItemsCollected();
+          List<Item> allItems = mGame.getmItems();
+          graphics(allItems, itemsCollected);
+        }
       }
     };
     timer.start();
@@ -237,11 +242,6 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
 
-        if(true && mGame.getmPlayer()!=null ){
-          List<Item> itemsCollected = mGame.getmPlayer().getItemsCollected();
-          List<Item> allItems = mGame.getmItems();
-          graphics(allItems, itemsCollected);
-        }
         //Create a picture marker symbol from a file on disk;
         PictureMarkerSymbol symbolToSet;
         int num = new Random().nextInt(4);
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
-    initCountdownTimer(480000);
+    initCountdownTimer(60000);
   }
 
   @Override
