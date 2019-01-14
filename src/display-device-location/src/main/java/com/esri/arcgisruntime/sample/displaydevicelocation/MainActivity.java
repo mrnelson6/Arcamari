@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
     updateDiameterLabel();
-    initCountdownTimer(30000);
+    initCountdownTimer(480000);
   }
 
   @Override
