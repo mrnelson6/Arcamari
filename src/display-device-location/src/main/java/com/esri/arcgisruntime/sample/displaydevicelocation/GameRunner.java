@@ -87,13 +87,13 @@ public class GameRunner {
                        Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
                                 (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5)) {
                                // && mPlayer.getDiameter() > currItem.getDiameter()) {
-          String playerDiameterString = Double.toString(mPlayer.getDiameter());
-          String currentItemDiameterString = Double.toString(currItem.getDiameter());
-          String numCollectedItems = Integer.toString(mPlayer.getItemsCollected().size());
-          Toast.makeText(ma, "Player diameter: " + playerDiameterString +
-                                   "\nCollected item diameter: " + currentItemDiameterString +
-                                   "\nNumber of items collected: " + numCollectedItems,
-                                   Toast.LENGTH_LONG).show();
+          if(currItem.getFeatureTableName().equals("Squirrels_V2")) {
+            Toast.makeText(ma, "Collected Squirrel", Toast.LENGTH_LONG).show();
+          } else if(currItem.getFeatureTableName().equals("Redlands_Trees")) {
+            Toast.makeText(ma, "Collected Tree", Toast.LENGTH_LONG).show();
+          } else {
+            Toast.makeText(ma, "Collected Fire Hydrant", Toast.LENGTH_LONG).show();
+          }
           ListenableFuture<Void> future = currItem.getFeature().getFeatureTable().deleteFeatureAsync(currItem.getFeature());
           try {
             future.get();
