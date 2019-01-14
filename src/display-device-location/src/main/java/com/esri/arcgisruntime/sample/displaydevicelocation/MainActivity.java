@@ -22,25 +22,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -48,22 +41,15 @@ import android.content.pm.PackageManager;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
-import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.Layer;
-import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.LayerList;
-import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
-import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -85,13 +71,14 @@ public class MainActivity extends AppCompatActivity {
   private boolean mIsBound = false;
   private MusicService mServ;
   private GameRunner mGame;
-  private Button mButton;
   private PopupWindow mPopupWindow;
   private RelativeLayout mRelativeLayout;
   private Context mContext;
   private Activity mActivity;
   Intent music;
-
+  public static TextView treeCounter;
+  public static TextView squirrelCounter;
+  public static TextView hydrantCounter;
   private ServiceConnection Scon = new ServiceConnection() {
     public void onServiceConnected(ComponentName name, IBinder binder) {
       mServ = ((MusicService.ServiceBinder) binder).getService();
@@ -119,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     final TextView diameterTextView = (TextView) findViewById(R.id.diameterTextView);
     diameterTextView.setTextColor(Color.BLACK);
     diameterTextView.setBackgroundColor(Color.WHITE);
-    diameterTextView.setText("Katamari diameter:\n" + String.format("%.2f", mGame.getPlayerDiameter(), 2));
+    diameterTextView.setText("Diameter:\n" + String.format("%.2f", mGame.getPlayerDiameter(), 2));
   }
 
   public void initCountdownTimer(long duration) {
@@ -163,32 +150,7 @@ public class MainActivity extends AppCompatActivity {
     mContext = getApplicationContext();
     mActivity = MainActivity.this;
     mRelativeLayout = (RelativeLayout) findViewById(R.id.rl);
-    mButton = (Button) findViewById(R.id.btn);
     mMapView = findViewById(R.id.mapView);
-
-    mButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        // Initialize a new instance of LayoutInflater service
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        // Inflate the custom layout/view
-        View customView = inflater.inflate(R.layout.custom_layout,null);
-
-        // Initialize a new instance of popup window
-        mPopupWindow = new PopupWindow(
-            customView,
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            true
-        );
-
-        mPopupWindow.setElevation(20);
-
-        // Finally, show the popup window at the center location of root relative layout
-        mPopupWindow.showAtLocation(mRelativeLayout, Gravity.CENTER,0,0);
-      }
-    });
 
     mKatamariPictureSymbol = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari));
     mKatamariPictureSymbol2 = new PictureMarkerSymbol((BitmapDrawable) getResources().getDrawable(R.drawable.trans_katamari2));
@@ -389,6 +351,14 @@ public class MainActivity extends AppCompatActivity {
 
     // Start Katamari Damacy OST
     startService(music);
+
+    // Initialize the counters
+    treeCounter = findViewById(R.id.secondTextView);
+    squirrelCounter = findViewById(R.id.thirdTextView);
+    hydrantCounter = findViewById(R.id.forthTextView);
+    treeCounter.setText("0");
+    squirrelCounter.setText("0");
+    hydrantCounter.setText("0");
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);

@@ -98,6 +98,17 @@ public class GameRunner {
           try {
             future.get();
             mItems.remove(currItem);
+
+            if(currItem.getFeatureTableName().equals("Squirrels_V2")){
+              MainActivity.squirrelCounter.setText(String.valueOf(Integer.parseInt(MainActivity.squirrelCounter.getText().toString())+1));
+            }
+            else if(currItem.getFeatureTableName().equals("Redlands_Trees")){
+              MainActivity.treeCounter.setText(String.valueOf(Integer.parseInt(MainActivity.treeCounter.getText().toString())+1));
+            }
+            else{
+              MainActivity.hydrantCounter.setText(String.valueOf(Integer.parseInt(MainActivity.hydrantCounter.getText().toString())+1));
+            }
+
             //make player bigger
             double itemArea = Math.PI * Math.pow(currItem.getDiameter() / 2, 2);
             double playerArea = Math.PI * Math.pow(mPlayer.getDiameter() / 2, 2);
