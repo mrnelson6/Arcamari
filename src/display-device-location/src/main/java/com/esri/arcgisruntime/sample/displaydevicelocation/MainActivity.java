@@ -114,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
+  void updateDiameterLabel() {
+    final TextView diameterTextView = (TextView) findViewById(R.id.diameterTextView);
+    diameterTextView.setTextColor(Color.BLACK);
+    diameterTextView.setBackgroundColor(Color.WHITE);
+    diameterTextView.setText("Katamari diameter:\n" + String.format("%.2f", mGame.getPlayerDiameter(), 2));
+  }
+
   public void initCountdownTimer(long duration) {
     final TextView timerTextView = (TextView) findViewById(R.id.timerTextView);
     timerTextView.setTextColor(Color.BLACK);
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer timer = new CountDownTimer(duration, 1000) {
       @Override
       public void onTick(final long millSecondsLeftToFinish) {
-        timerTextView.setText("Time left: "+String.format("%02d:%02d",
+        timerTextView.setText("Time left:\n"+String.format("%02d:%02d",
                               TimeUnit.MILLISECONDS.toMinutes(millSecondsLeftToFinish),
                               TimeUnit.MILLISECONDS.toSeconds(millSecondsLeftToFinish) -
                               TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millSecondsLeftToFinish))));
@@ -333,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
           //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
         mGame.collide(MainActivity.this);
+        updateDiameterLabel();
        // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
       }
     });
@@ -385,7 +393,8 @@ public class MainActivity extends AppCompatActivity {
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
-    initCountdownTimer(60000);
+    updateDiameterLabel();
+    initCountdownTimer(480000);
   }
 
   @Override
@@ -451,6 +460,5 @@ public class MainActivity extends AppCompatActivity {
     for(Item currItem : itemsCollected) {
       currItem.getFeature().getFeatureTable().getFeatureLayer().setFeatureVisible(currItem.getFeature(), true);
     }
-
   }
 }
