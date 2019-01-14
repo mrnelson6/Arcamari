@@ -33,7 +33,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
   public void onCreate() {
     super.onCreate();
 
-    mPlayer = MediaPlayer.create(this, R.raw.i_am_esri);
+    mPlayer = MediaPlayer.create(this, R.raw.katamari_ost);
     mPlayer.setOnErrorListener(this);
 
     if (mPlayer != null) {
