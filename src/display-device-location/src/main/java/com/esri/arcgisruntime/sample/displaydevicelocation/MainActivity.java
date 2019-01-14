@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
   private RelativeLayout mRelativeLayout;
   private Context mContext;
   private Activity mActivity;
+  Intent music;
 
   private ServiceConnection Scon = new ServiceConnection() {
     public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    music = new Intent(this, MusicService.class);
     super.onCreate(savedInstanceState);
     mComplete = false;
     setContentView(R.layout.activity_main);
@@ -380,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Start Katamari Damacy OST
-    Intent music = new Intent(this, MusicService.class);
     startService(music);
 
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
@@ -412,20 +413,21 @@ public class MainActivity extends AppCompatActivity {
   protected void onPause() {
     mMapView.pause();
     super.onPause();
-    // mServ.pauseMusic();
+    stopService(music);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     mMapView.resume();
-    // mServ.pauseMusic();
+    startService(music);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
     mMapView.dispose();
+    stopService(music);
   }
 
   public void graphics(List<Item> allItems, List<Item> itemsCollected){
