@@ -302,8 +302,10 @@ public class MainActivity extends AppCompatActivity {
         //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
         //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
           //mLocationDisplay.setAccuracySymbol(pinBlankOrangeSymbol);
-        mGame.collide(MainActivity.this);
-        updateDiameterLabel();
+        if(!mComplete) {
+          mGame.collide(MainActivity.this);
+          updateDiameterLabel();
+        }
        // Toast.makeText(MainActivity.this, "we got em", Toast.LENGTH_LONG).show();
       }
     });
@@ -363,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
     final String mapURL = "https://www.arcgis.com/home/webmap/viewer.html?webmap=44f99fb7e03f4c5a8f01bcf467cd71e6";
     mGame = new GameRunner(mMapView, mapURL, mLocationDisplay);
     updateDiameterLabel();
-    initCountdownTimer(480000);
+    initCountdownTimer(30000);
   }
 
   @Override
