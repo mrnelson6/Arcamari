@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
   private PictureMarkerSymbol mKatamariPictureSymbol2;
   private PictureMarkerSymbol mKatamariPictureSymbol3;
   private PictureMarkerSymbol mKatamariPictureSymbol4;
-  private float lastDiam = 50;
+  private float lastDiam = 10;
   private int requestCode = 2;
   String[] reqPermissions = new String[]{ Manifest.permission.ACCESS_FINE_LOCATION,
                                           Manifest.permission.ACCESS_COARSE_LOCATION };
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         mComplete = true;
         timerTextView.setText("Game Over");
-
+        mMapView.getMap().setMinScale(10000);
         if(mGame.getmPlayer()!=null ){
             mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.OFF);
             mMapView.setOnTouchListener(onTouchList);
@@ -284,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    // get the MapView's LocationDisplay
     mLocationDisplay = mMapView.getLocationDisplay();
 
     mLocationDisplay.setInitialZoomScale(2500);
@@ -385,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
     // This mode is best suited for in-vehicle navigation.
     mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
     if (!mLocationDisplay.isStarted()) {
-      mLocationDisplay.setDefaultSymbol(new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, Color.RED, 10));
       mLocationDisplay.startAsync();
     }
 
@@ -423,6 +421,7 @@ public class MainActivity extends AppCompatActivity {
     mMapView.pause();
     super.onPause();
     stopService(music);
+    mLocationDisplay.stop();
   }
 
   @Override
@@ -430,6 +429,12 @@ public class MainActivity extends AppCompatActivity {
     super.onResume();
     mMapView.resume();
     startService(music);
+    mLocationDisplay = mMapView.getLocationDisplay();
+    mLocationDisplay.setInitialZoomScale(2500);
+    mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
+    if (!mLocationDisplay.isStarted()) {
+      mLocationDisplay.startAsync();
+    }
   }
 
   @Override
@@ -437,6 +442,7 @@ public class MainActivity extends AppCompatActivity {
     super.onDestroy();
     mMapView.dispose();
     stopService(music);
+    mLocationDisplay.stop();
   }
 
   public void graphics(List<Item> allItems, List<Item> itemsCollected){

@@ -42,6 +42,7 @@ public class GameRunner {
 
   private void loadMap(String mapURL) {
     mMap = new ArcGISMap(mapURL);
+    mMap.setMinScale(2499);
     mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
       @Override
       public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {
@@ -57,7 +58,7 @@ public class GameRunner {
 
   public double getPlayerDiameter() {
     if(mPlayer == null) {
-      return -1.0;
+      return 10.0;
     }
     return mPlayer.getDiameter();
   }
@@ -84,8 +85,8 @@ public class GameRunner {
         //check collision
         if ((Math.sqrt(Math.pow((mPlayer.getLat() - currItem.getLatitude()), 2) +
                        Math.pow((mPlayer.getLon() - currItem.getLongitude()), 2)) <
-                                (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5) &&
-                                 mPlayer.getDiameter() != currItem.getDiameter()) {
+                                (mPlayer.getDiameter() + currItem.getDiameter()) / 2.5)) {
+                               // && mPlayer.getDiameter() > currItem.getDiameter()) {
           String playerDiameterString = Double.toString(mPlayer.getDiameter());
           String currentItemDiameterString = Double.toString(currItem.getDiameter());
           String numCollectedItems = Integer.toString(mPlayer.getItemsCollected().size());
@@ -103,11 +104,9 @@ public class GameRunner {
             playerArea += itemArea / 8;
             mPlayer.setDiameter(2 * Math.sqrt(playerArea / Math.PI));
             mPlayer.addItemsCollected(currItem);
-            
-            //possiblly needed change scale
-            //double scaleVal = 2500 + (player.getDiameter() * 100);
-            //ListenableFuture<Boolean> scaleFuture = mMapView.setViewpointScaleAsync(scaleVal);
-            //scaleFuture.get();
+            if(mPlayer.getDiameter() > 100) {
+              mPlayer.setDiameter(100);
+            }
 
           } catch (Exception e) {
             System.out.println("I cannot begin to fathom how we got here!");
