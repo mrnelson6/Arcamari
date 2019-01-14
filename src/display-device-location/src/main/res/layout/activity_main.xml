@@ -9,15 +9,20 @@
     <com.esri.arcgisruntime.mapping.view.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.esri.arcgisruntime.mapping.view.MapView>
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"></com.esri.arcgisruntime.mapping.view.MapView>
 
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/diameterTextView"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
         android:text="TextView" />
 
     <Button
@@ -27,5 +32,15 @@
         android:layout_alignParentRight="true"
         android:text="Show Collected Items"
         />
+
+    <TextView
+        android:id="@+id/diameterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:text="TextView" />
 
 </RelativeLayout>

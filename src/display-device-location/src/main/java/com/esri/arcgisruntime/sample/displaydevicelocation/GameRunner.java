@@ -1,5 +1,7 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 import android.widget.Toast;
