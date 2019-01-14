@@ -45,7 +45,7 @@ public final class Item {
         return Double.parseDouble((String)diameterValue);
       }
     }
-    return 1.0;
+    return 10.0;
   }
 
   public double getDiameter() {
