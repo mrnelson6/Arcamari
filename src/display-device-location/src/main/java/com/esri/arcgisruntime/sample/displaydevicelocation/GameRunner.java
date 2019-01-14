@@ -1,15 +1,10 @@
 package com.esri.arcgisruntime.sample.displaydevicelocation;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.CountDownTimer;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import java.lang.Math;
 
-import com.esri.arcgisruntime.data.ServiceFeatureTable;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.loadable.LoadStatus;
@@ -42,7 +37,6 @@ public class GameRunner {
 
   private void loadMap(String mapURL) {
     mMap = new ArcGISMap(mapURL);
-    mMap.setMinScale(2499);
     mMap.addLoadStatusChangedListener(new LoadStatusChangedListener() {
       @Override
       public void loadStatusChanged(LoadStatusChangedEvent loadStatusChangedEvent) {

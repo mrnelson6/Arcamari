@@ -400,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
     mMapView.resume();
     startService(music);
     mLocationDisplay = mMapView.getLocationDisplay();
+    mMapView.getMap().setMinScale(2499);
     mLocationDisplay.setInitialZoomScale(2500);
     mLocationDisplay.setAutoPanMode(LocationDisplay.AutoPanMode.COMPASS_NAVIGATION);
     if (!mLocationDisplay.isStarted()) {
